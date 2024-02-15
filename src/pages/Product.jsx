@@ -26,11 +26,11 @@ function Product() {
   // }
 
   const [filterCriteria, setFilterCriteria] = useState({
-    marketSegment: null,
-    brand: null,
-    application: null,
-    grade: null,
-    package: null
+    marketSegments: null,
+    brands: null,
+    applications: null,
+    gradeS: null,
+    packages: null
   });
 
 
@@ -42,9 +42,17 @@ function Product() {
   }
   // Function to filter products based on specified criteria
   const filterProducts = (criteria) => {
+    console.log(Object.keys(criteria))
+    console.log(criteria)
+    console.log(products.products.filter(product =>
+      Object.keys(criteria).every(key =>
+        criteria[key] == null || criteria[key] === product[key]?.name
+      ))
+    );
+
     return products.products.filter(product =>
       Object.keys(criteria).every(key =>
-        criteria[key] === null || criteria[key] === product[key].name
+        criteria[key] == null || criteria[key] === product[key]?.name
       )
     );
   };
@@ -83,35 +91,40 @@ function Product() {
         {/* Market Segment Dropdown */}
         
         <Dropdown label="Market Segment"
-          options={products.marketSegments.map(product => product.name).filter((value, index, self) => self.indexOf(value) === index)}
-          value={filterCriteria.marketSegment}
+        name="marketSegments"
+        options={products.marketSegments.map(product => product.name).filter((value, index, self) => self.indexOf(value) === index)}
+          value={filterCriteria.marketSegments}
           onChange={handleFilterChange} />
 
         <Dropdown label="Brand"
+        name="brands"
           options={products.brands.map(product => product.name).filter((value, index, self) => self.indexOf(value) === index)}
-          value={filterCriteria.brand}
+          value={filterCriteria.brands}
           onChange={handleFilterChange} />
 
         <Dropdown label="Application"
+        name="applications"
           options={products.applications.map(product => product.name).filter((value, index, self) => self.indexOf(value) === index)}
-          value={filterCriteria.application}
+          value={filterCriteria.applications}
           onChange={handleFilterChange} />
 
         <Dropdown label="Grade"
+        name="gradeS"
           options={products.gradeS.map(product => product.name).filter((value, index, self) => self.indexOf(value) === index)}
-          value={filterCriteria.grade}
+          value={filterCriteria.gradeS}
           onChange={handleFilterChange} />
 
         <Dropdown label="Package"
+        name="packages"
           options={products.packages.map(product => product.name).filter((value, index, self) => self.indexOf(value) === index)}
-          value={filterCriteria.package}
+          value={filterCriteria.packages}
           onChange={handleFilterChange} />
 
         {/* Repeat similar dropdowns for other criteria like brand, application, grade, and package */}
       </div>
 
           <div className='max-w-[1300px] mx-auto my-0 flex flex-wrap items-center justify-center md:justify-between gap-y-16 px-5'>
-        {filteredProducts.map(products =>(
+        {filteredProducts.length == 0 ? "No Available Products" : filteredProducts.map(products =>(
           <ProductCards
           key={products.id}
             Name={products.productName}
