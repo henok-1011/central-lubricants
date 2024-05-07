@@ -1,4 +1,5 @@
 import React from 'react'
+import "../style.css"
 
 function About() {
   return (
@@ -9,7 +10,7 @@ function About() {
               <div className="absolute inset-0 bg-black opacity-50"></div>
 
               <div className="absolute top-[40%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white outlines w-full flex justify-center">
-                  <h1 className="text-white-100 text-4xl md:text-[55px] text-center justify-center slide-in flex flex-wrap gap-6 ">About US</h1>
+                  <h1 className="text-white-100 text-4xl md:text-[55px] text-center justify-center slide-in flex flex-wrap gap-6 ">About Us</h1>
               </div>
             
 
@@ -66,14 +67,20 @@ function About() {
         </div>
         
           <div className='my-28 max-w-[1200px] mx-auto px-5'>
-                  <p className='text-center text-3xl '>Some of Our <br /> Big Name Vendors</p>
+                  <p className='text-center text-3xl mb-10'>Some of Our <br /> Big Name Partners</p>
 
-                  <div className='flex flex-wrap justify-center md:justify-between items-center gap-20 mt-5'>
-                      <img className='w-[200px] h-auto' src="assets/Partners/AGIP.png" alt="" />
-                      <img className='w-[200px] h-auto' src="assets/Partners/ALPHA.png" alt="" />
-                      <img className='w-[200px] h-auto' src="assets/Partners/BP.png" alt="" />
-                      <img className='w-[200px] h-auto' src="assets/Partners/CALTEX.jpg" alt="" />
-                  </div>
+        {/* <marquee behavior="scroll" direction="left" scrollamount="25" className="w-full flex"> */}
+        <div className='max-w-[1300px] mx-auto my-0 '>
+          <div className="marquee-container flex ml-7">
+
+            <div className="marquee flex ">
+              <img className='h-24 mx-6' src="assets/Partners/CHEVRON.jpg" alt="" />
+              <img className='h-24 mx-6' src="assets/Partners/DELTA.jpg" alt="" />
+              <img className='h-24 mx-6' src="assets/Partners/EXXONMOBIL.png" alt="" />
+              <img className='h-24 mx-6' src="assets/Partners/FOTEX.png" alt="" />        </div>
+          </div>
+        </div>
+        {/* </marquee> */}
 
         </div>
 

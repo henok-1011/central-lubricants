@@ -7,6 +7,8 @@ import Home from './pages/Home'
 import Product from './pages/Product'
 import Footer from './components/Footer'
 import Header from './components/Header';
+import Knowledebase from './pages/Knowledebase';
+import InsightDetail from './pages/InsightDetail';
 
 function App() {
   return (
@@ -15,6 +17,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/knowledge-base" element={<Knowledebase />} />
+        <Route path="/knowledge-base/:id" element={<InsightDetail/>} />
         <Route path="/product" element={<Product />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/product/:id" element={<Product />} />

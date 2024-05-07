@@ -11,6 +11,42 @@ const category = `
     products {code}
 `
 
+export const QUERY_Home = gql `
+    query {
+        heroSections {
+    backgroundPicture {
+      url
+    }
+    frontpicture {
+      url
+    }
+    frontText {
+      text
+    }
+  }
+  homePageNotices {
+    notice {
+      text
+    }
+  }
+  whoWeAreImages {
+    picture {
+      url
+    }
+  }
+  homepagecertificates {
+    certificatePicture {
+      url
+    }
+  }
+  partnersPictures {
+    partnersPicture {
+      url
+    }
+  }
+    }
+`
+
 export const QUERY_PRODUCTS = gql `
     query {
 
@@ -18,6 +54,7 @@ export const QUERY_PRODUCTS = gql `
     id
     productDescription
     productName
+    productType
     productPicture {
       url
     }
@@ -38,6 +75,18 @@ export const QUERY_PRODUCTS = gql `
     }
     packages {
       name
+    }
+    autoServiceBrand{
+        name
+    }
+    autoServiceCategory{
+        name
+    }
+    autoSparepartBrand{
+        name
+    }
+    autoSparepartCategory{
+        name
     }
   }
 
@@ -62,10 +111,37 @@ export const QUERY_PRODUCTS = gql `
     packages {
       name
     }
+     autoServiceBrands{
+        name
+    }
+    autoServiceCategories{
+        name
+    }
+    autoSparepartBrands{
+        name
+    }
+    autoSparepartCategories{
+        name
+    }
 
 }
 `
 
+export const QUERY_INSIGHTS = gql `
+    query Insights {
+        insights {
+        content{
+          raw
+        }
+        coverPicture {
+        url
+        }
+        postDate
+        insightTitle
+        description
+        slug
+        }
+    }`
 
 export const QUERY_PROJECTS = gql ` 
     query {

@@ -1,0 +1,38 @@
+.marquee-container {
+    overflow: hidden;
+    width: 300px;
+}
+
+@media (min-width: 768px) {
+    /* Tablet */
+    .marquee-container {
+        width: 700px;
+    }
+}
+
+@media (min-width: 1024px) {
+    /* PC */
+    .marquee-container {
+        width: 1200px;
+    }
+}
+
+.marquee {
+    display: flex;
+    animation: marqueeAnimation 25s linear infinite;
+}
+
+.marquee img {
+    flex-shrink: 0;
+    width: auto;
+}
+
+@keyframes marqueeAnimation {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-500%);
+        /* Adjust to -300% if there are more repetitions */
+    }
+}

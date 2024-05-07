@@ -1,22 +1,68 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import '../style.css';
+import { QUERY_Home, graphcms } from '../Graphql/Queries';
+import ReactLoading from 'react-loading';
+
 
 function Home() {
+  const [Home, setHome] = useState();
+  const [loading, setLoading] = useState(true);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+
+
+  useEffect(() => {
+    graphcms.request(QUERY_Home)
+      .then(data => {
+        console.log(data); // Log the fetched data to inspect its structure
+        setHome(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching data:', err);
+        setLoading(false);
+      });
+  }, []);
+
+
+  useEffect(() => {
+    if (Home && Home.heroSections && Home.heroSections.length > 0) {
+    const timer = setInterval(() => {
+      setCurrentSlide((prevSlide) =>
+        prevSlide === Home.heroSections?.length - 1 ? 0 : prevSlide + 1
+      );
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }
+  }, []);
+  
+  if (loading) {
+    return (
+      <div className='flex items-center justify-center h-screen text-secondary-100'>
+        <ReactLoading type="spinningBubbles" color='rgb(228 157 91)' height={'200px'} width={'200px'} />
+      </div>)
+  }
+
   return (
     <div>
-
-      <div className="relative w-fill overflow-hidden h-[100vh]">
-        <img src="assets/herobg.png" className='w-full h-[100vh]' alt="" />
+      
+        <div className="relative w-fill overflow-hidden h-[80vh]">
+          <img src={Home.heroSections[currentSlide].backgroundPicture.url} className='w-full h-[100vh]' alt="" />
 
         <div className="absolute inset-0 bg-black opacity-50"></div>
 
         <div className="absolute top-[85%] md:top-[50%] px-5 md:px-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white outlines w-full flex flex-col md:flex-row h-[100vh]  items-center max-w-[1300px] mx-auto my-0">
           <div>
-            <p className="text-white-100 md:text-[17px] text-start  justify-center slide-in ">Discover our premium automotive lubricants today. </p>
-            <h1 className="text-white-100 text-4xl md:text-[45px] text-start leading-[50px] justify-center slide-in flex flex-wrap mb-10">Drive with confidence. <br /> Superior performance starts here</h1>
-            <a href="/products" className='bg-[#081ED1] px-5 py-3 text-white-100 font-semibold rounded-md w-fit mt-16'>See Products</a>
+              <h1 className="text-white-100 text-4xl md:text-[45px] text-start leading-[50px] justify-center slide-in flex flex-wrap mb-10">{Home.heroSections[currentSlide].frontText.text}</h1>
           </div>
-          <img className='hidden md:inline' src="assets/heroimg.png" alt="" />
+            <img className='hidden md:inline' src={Home.heroSections[currentSlide].frontpicture.url} alt="" />
         </div>
+
+      </div>
+      
+      <div className='max-w-[1000px] mx-auto my-0 mt-1'>
+        <marquee behavior="" direction="" className="text-[#081ED1] font-semibold text-3xl">{Home.homePageNotices[0].notice.text?.length == 0 ?"": Home.homePageNotices[0].notice.text}</marquee>
 
       </div>
 
@@ -55,19 +101,25 @@ function Home() {
               Furthermore, we firmly believe in treating our customers with fairness and respect, striving to make every interaction with us a seamless and positive experience. We are dedicated to simplifying the process of doing business with us, offering unparalleled customer service and support at every turn. </p>
             <a href="/about" className='bg-[#081ED1] px-5 py-3 text-white-100 font-medium rounded-md'>Find Out More</a>
           </div>
-          <img className=' px-5 md:w-[40%] w-full' src="assets/Rectangle.png" alt="" />
+          <img className=' px-5 md:w-[40%] w-full' src={Home.whoWeAreImages[0].picture.url} alt="" />
         </div>
 
       </div>
 
       <div className='my-28 bg-[#353535] py-14 flex flex-col justify-center items-center'>
         <p className='text-center text-3xl  text-white-100 mb-10 mt-1'>We are marked by an extensive period of internationally <br /> recognized excellence</p>
-        
-        <div className='flex max-w-[1300px] mx-auto my-10 gap-20 flex-wrap justify-center'>
-          <img src="assets/award1.png" alt="" className='mt-10'/>
-          <img src="assets/award2.png" alt=""/>
-          <img src="assets/award3.png" alt="" className='mt-10'/>
+
+        {/* <marquee behavior="scroll" direction="left" scrollamount="25" className="w-full flex"> */}
+        <div className='max-w-[1300px] mx-auto my-0 '>
+          <div className="marquee-container flex ml-7">
+
+            <div className="marquee flex ">
+              <img src="assets/award1.png" alt="" className='mt-10 ml-6' />
+              <img src="assets/award2.png" alt="" className='mt-10 ml-6'/>
+              <img src="assets/award3.png" alt="" className='mt-10 ml-6' />       </div>
+          </div>
         </div>
+        {/* </marquee> */}
 
       </div>
 
@@ -76,14 +128,24 @@ function Home() {
           <h2 className='text-center text-3xl font-medium'>Partners You May Recognize</h2>
           <p className='text-center text-md mt-5'>Explore our network of trusted collaborations with recognized names, bringing you valued partnerships <br /> that resonate with trust and reliability.</p>
         </div>
-        <div className='flex flex-wrap justify-center md:justify-between items-center gap-20 mt-5 max-w-[1300px] mx-auto my-0'>
-          <img className='w-[200px] h-auto' src="assets/Partners/CHEVRON.jpg" alt="" />
-          <img className='w-[200px] h-auto' src="assets/Partners/DELTA.jpg" alt="" />
-          <img className='w-[200px] h-auto' src="assets/Partners/EXXONMOBIL.png" alt="" />
-          <img className='w-[200px] h-auto' src="assets/Partners/FOTEX.png" alt="" />
-        </div>
+
+        {/* <marquee behavior="scroll" direction="left" scrollamount="25" className="w-full flex"> */}
+      <div className='max-w-[1300px] mx-auto my-0 '>
+        <div className="marquee-container flex ml-7">
+
+        <div className="marquee flex ">
+          <img className='h-24 mx-6' src="assets/Partners/CHEVRON.jpg" alt="" />
+          <img className='h-24 mx-6' src="assets/Partners/DELTA.jpg" alt="" />
+          <img className='h-24 mx-6' src="assets/Partners/EXXONMOBIL.png" alt="" />
+          <img className='h-24 mx-6' src="assets/Partners/FOTEX.png" alt="" />        </div>
+      </div>
+      </div>
+      {/* </marquee> */}
+
       </div>
 
+     
+     
       <div className="relative w-fill mt-36 md:h-auto h-[30vh]">
         <img src="assets/smoothride.png" className='w-full h-[30vh] md:h-auto' alt="" />
 

@@ -19,18 +19,22 @@ const Header = ({ home }) => {
         },
         {
             id: 2,
-            name: 'About',
-            link: '/about',
-        },
-        {
-            id: 3,
             name: 'Product',
             link: '/product',
         },
         {
-            id: 6,
+            id: 3,
+            name: 'Knowledge Base',
+            link: '/knowledge-base',
+        },
+        {
+            id: 4,
             name: 'Contact',
             link: '/contact',
+        },{
+            id: 5,
+            name: 'About',
+            link: '/about',
         }
     ];
 
@@ -65,7 +69,7 @@ const Header = ({ home }) => {
 
 
 
-                <div className={`z-10 h-[100vh] w-[80%] bg-primary-300 absolute top-0 transition-all duration-500 ease-in ${active ? "right-0 block" : "-right-[100%] hidden"
+                <div className={`z-10 h-[100vh] w-[90%] bg-primary-300 absolute top-0 transition-all duration-500 ease-in ${active ? "right-0 block" : "-right-[100%] hidden"
                     }`}>
                     <div className={`w-full h-full flex flex-col items-start justify-start px-10 pb-10 pt-0 bg-black-100`}>
                         <BiRightArrowAlt
