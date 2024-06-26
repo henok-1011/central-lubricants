@@ -24,7 +24,7 @@ const Header = ({ home }) => {
         },
         {
             id: 3,
-            name: 'Knowledge Base',
+            name: 'Knowledge-Base',
             link: '/knowledge-base',
         },
         {
@@ -56,10 +56,10 @@ const Header = ({ home }) => {
 
                     
                 </div>
-                <div className='hidden w-[39%] sm:flex justify-evenly'>
+                <div className='hidden w-[39%] sm:flex justify-evenly gap-[12px]'>
                     {
                         headerItems.map((item) => (
-                            <a href={item.link} key={item.id} className={`cursor-pointer text-secondary-100 text-[20px] font-medium`} >
+                            <a href={item.link} key={item.id} className={`cursor-pointer text-secondary-100 text-[18px]  font-medium`} >
                                 {item.name}
                             </a>
                         ))

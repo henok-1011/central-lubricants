@@ -54,7 +54,7 @@ function Home() {
 
         <div className="absolute top-[85%] md:top-[50%] px-5 md:px-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white outlines w-full flex flex-col md:flex-row h-[100vh]  items-center max-w-[1300px] mx-auto my-0">
           <div>
-              <h1 className="text-white-100 text-4xl md:text-[45px] text-start leading-[50px] justify-center slide-in flex flex-wrap mb-10">{Home.heroSections[currentSlide].frontText.text}</h1>
+              <h1 className="text-white-100 text-4xl md:text-[40px] pl-5 text-start leading-[50px] justify-center slide-in flex flex-wrap mb-10">{Home.heroSections[currentSlide].frontText.text}</h1>
           </div>
             <img className='hidden md:inline' src={Home.heroSections[currentSlide].frontpicture.url} alt="" />
         </div>
