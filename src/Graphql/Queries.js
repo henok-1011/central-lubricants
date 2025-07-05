@@ -48,9 +48,8 @@ export const QUERY_Home = gql `
 `
 
 export const QUERY_PRODUCTS = gql `
-    query {
-
-    products(first: 500) {
+    query GetProducts($first: Int!, $skip: Int!) {
+    products(first: $first, skip: $skip) {
     id
     productDescription
     productName

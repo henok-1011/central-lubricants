@@ -9,14 +9,46 @@ function Product() {
   const [products, setproducts] = useState();
   const [loading, setLoading] = useState(true);
 
+useEffect(() => {
+  const fetchAllProducts = async () => {
+    let allProducts = [];
+    let hasMore = true;
+    let skip = 0;
+    const limit = 100;
+
+    while (hasMore) {
+      try {
+        const res = await graphcms.request(QUERY_PRODUCTS, { first: limit, skip });
+        const pageProducts = res.products;
+
+        allProducts = [...allProducts, ...pageProducts];
+        skip += limit;
+
+        hasMore = pageProducts?.length === limit;
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        break;
+      }
+    }
+
+    console.log("Fetched products:", allProducts[102]);
+    setproducts(allProducts);
+    // console.log("Products fetched:", products?.length);
+
+  };
+
+  fetchAllProducts();
+}, []);
+
   useEffect(() => {
-    graphcms.request(QUERY_PRODUCTS)
-      .then(data => {
-        setproducts(data)
-        console.log(data)
-        setLoading(false);
-      }).catch(err => console.log(err));
-  }, [])
+    if (products?.length > 0) {
+      // console.log("✅ Products updated in state:", products);
+      setLoading(false);
+
+    }else {
+      console.log("❌ No products found or products not updated in state.");
+    }
+  }, [products]);
 
   // if (loading) {
   //   return (
@@ -31,21 +63,21 @@ function Product() {
     applications: null,
     gradeS: null,
     packages: null,
-    autoSparepartCategories: null,
-    autoSparepartBrands: null,
-    autoServiceCategories:null,
-    autoServiceBrands:null
+    autoSparepartCategory: null,
+    autoSparepartBrand: null,
+    autoServiceCategory:null,
+    autoServiceBrand:null
   });
 
   const [filterCriteriaAutoSparepart, setFilterCriteriaAutoSparepart] = useState({
-    autoSparepartCategories: null,
-    autoSparepartBrands: null,
+    autoSparepartCategory: null,
+    autoSparepartBrand: null,
 
   });
 
   const [filterCriteriaAutoService, setFilterCriteriaAutoService] = useState({
-    autoServiceCategories: null,
-    autoServiceBrands: null
+    autoServiceCategory: null,
+    autoServiceBrand: null
   });
 
 
@@ -59,7 +91,7 @@ function Product() {
   const filterProducts = (criteria) => {
     console.log(Object.keys(criteria))
     console.log(criteria)
-    console.log(products.products.filter(product =>
+    console.log(products?.filter(name => name != null)?.filter(product =>
       Object.keys(criteria).every(key =>
         criteria[key] == null || criteria[key] === product[key]?.name
       ))
@@ -67,7 +99,7 @@ function Product() {
 
  
 
-    return products.products.filter(product => product.productType == "Lubricant").filter(product =>
+    return products?.filter(name => name != null)?.filter(product => product.productType == "Lubricant")?.filter(name => name != null)?.filter(product =>
       Object.keys(criteria).every(key =>
         criteria[key] == null || criteria[key] === product[key]?.name
       )
@@ -77,14 +109,14 @@ function Product() {
   const filterAutoSparepart = (criteria) => {
     console.log(Object.keys(criteria))
     console.log(criteria)
-    console.log(products.products.filter(product => product.productType == "Auto_Spareparts").filter(product =>
+    console.log(products?.filter(name => name != null)?.filter(product => product.productType == "Auto_Spareparts")?.filter(name => name != null)?.filter(product =>
       Object.keys(criteria).every(key =>
         criteria[key] == null || criteria[key] === product[key]?.name
       ))
     );
 
 
-    return products.products.filter(product => product.productType == "Auto_Spareparts").filter(product =>
+    return products?.filter(name => name != null)?.filter(product => product.productType == "Auto_Spareparts")?.filter(name => name != null)?.filter(product =>
       Object.keys(criteria).every(key =>
         criteria[key] == null || criteria[key] === product[key]?.name
       )
@@ -92,9 +124,9 @@ function Product() {
   };
 
   const filterAutoService = (criteria) => {
-    console.log(Object.keys(criteria))
-    console.log(criteria)
-    console.log(products.products.filter(product => product.productType == "Auto_Service").filter(product =>
+    // console.log(Object.keys(criteria))
+    // console.log("criteria" + criteria)
+    console.log(products?.filter(name => name != null)?.filter(product => product.productType == "Auto_Service")?.filter(name => name != null)?.filter(product =>
       Object.keys(criteria).every(key =>
         criteria[key] == null || criteria[key] === product[key]?.name
       ))
@@ -102,7 +134,7 @@ function Product() {
 
 
 
-    return products.products.filter(product => product.productType == "Auto_Service").filter(product =>
+    return products?.filter(name => name != null)?.filter(product => product.productType == "Auto_Service")?.filter(name => name != null)?.filter(product =>
       Object.keys(criteria).every(key =>
         criteria[key] == null || criteria[key] === product[key]?.name
       )
@@ -113,6 +145,10 @@ function Product() {
   const handleFilterChange = (event) => {
     const { name, value } = event.target;
     setFilterCriteria(prevCriteria => ({
+      ...prevCriteria,
+      [name]: value === "All" ? null : value
+    }));
+    setFilterCriteriaAutoService(prevCriteria => ({
       ...prevCriteria,
       [name]: value === "All" ? null : value
     }));
@@ -166,31 +202,31 @@ function Product() {
         {/* Market Segment Dropdown */}
         <Dropdown label="Market Segment"
         name="marketSegments"
-        options={products.marketSegments?.map(product => product.name).filter((value, index, self) => self.indexOf(value) === index)}
+            options={products?.map(product => product.marketSegments.name)?.filter(name => name != null)?.filter((value, index, self) => self.indexOf(value) === index) ?? []}
           value={filterCriteria.marketSegments}
           onChange={handleFilterChange} />
 
         <Dropdown label="Brand"
         name="brands"
-          options={products.brands?.map(product => product.name).filter((value, index, self) => self.indexOf(value) === index)}
+            options={products?.map(product => product.brands?.name)?.filter(name => name != null)?.filter((value, index, self) => self.indexOf(value) === index) ?? []}
           value={filterCriteria.brands}
           onChange={handleFilterChange} />
 
         <Dropdown label="Application"
         name="applications"
-          options={products.applications?.map(product => product.name).filter((value, index, self) => self.indexOf(value) === index)}
+          options={products?.map(product => product.applications?.name)?.filter(name => name != null)?.filter((value, index, self) => self.indexOf(value) === index) ?? []}
           value={filterCriteria.applications}
           onChange={handleFilterChange} />
 
         <Dropdown label="Grade"
         name="gradeS"
-          options={products.gradeS?.map(product => product.name).filter((value, index, self) => self.indexOf(value) === index)}
+            options={products?.map(product => product.gradeS?.name)?.filter(name => name != null)?.filter((value, index, self) => self.indexOf(value) === index) ?? []}
           value={filterCriteria.gradeS}
           onChange={handleFilterChange} />
 
         <Dropdown label="Package"
         name="packages"
-          options={products.packages?.map(product => product.name).filter((value, index, self) => self.indexOf(value) === index)}
+            options={products?.map(product => product.packages?.name)?.filter(name => name != null)?.filter((value, index, self) => self.indexOf(value) === index) ?? []}
           value={filterCriteria.packages}
           onChange={handleFilterChange} />
 
@@ -198,7 +234,7 @@ function Product() {
       </div>
 
           <div className='max-w-[1300px] mx-auto my-0 flex flex-wrap items-center justify-center md:justify-between gap-y-16 px-5'>
-        {filteredProducts.length == 0 ? "No Available Products" : filteredProducts.map(products =>(
+        {filteredProducts?.length == 0 ? "No Available Products" : filteredProducts?.map(products =>(
           <ProductCards
           key={products.id}
             Name={products.productName}
@@ -215,22 +251,22 @@ function Product() {
         <div className="flex flex-wrap space-x-9 mb-10 justify-center items-center px-2">
           {/* Market Segment Dropdown */}
           <Dropdown label="Brand"
-            name="autoSparepartBrands"
-            options={products.autoSparepartBrands?.map(product => product.name).filter((value, index, self) => self.indexOf(value) === index)}
-            value={filterCriteriaAutoSparepart.autoSparepartBrands}
+            name="autoSparepartBrand"
+            options={products?.map(product => product.autoSparepartBrand?.name)?.filter(name => name != null)?.filter((value, index, self) => self.indexOf(value) === index) ?? []}
+            value={filterCriteriaAutoSparepart.autoSparepartBrand}
             onChange={handleFilterChangeAutoSparepart} />
 
           <Dropdown label="Category"
-            name="autoSparepartCategories"
-            options={products.autoSparepartCategories?.map(product => product.name).filter((value, index, self) => self.indexOf(value) === index)}
-            value={filterCriteriaAutoSparepart.autoSparepartCategories}
+            name="autoSparepartCategory"
+            options={products?.map(product => product.autoSparepartCategory?.name)?.filter(name => name != null)?.filter((value, index, self) => self.indexOf(value) === index) ?? []}
+            value={filterCriteriaAutoSparepart.autoSparepartCategory}
             onChange={handleFilterChangeAutoSparepart} />
 
           {/* Repeat similar dropdowns for other criteria like brand, application, grade, and package */}
         </div>
 
         <div className='max-w-[1300px] mx-auto my-0 flex flex-wrap items-center justify-center md:justify-between gap-y-16 px-5'>
-          {filteredProductsAutoSparepart.length == 0 ? "No Available Products" : filteredProductsAutoSparepart.map(products => (
+          {filteredProductsAutoSparepart?.length == 0 ? "No Available Products" : filteredProductsAutoSparepart?.map(products => (
             <ProductCards
               key={products.id}
               Name={products.productName}
@@ -249,22 +285,22 @@ function Product() {
         <div className="flex flex-wrap space-x-9 mb-10 justify-center items-center px-2">
           {/* Market Segment Dropdown */}
           <Dropdown label="Brand"
-            name="autoServiceBrands"
-            options={products.autoServiceBrands?.map(product => product.name).filter((value, index, self) => self.indexOf(value) === index)}
-            value={filterCriteriaAutoService.autoServiceBrands}
+            name="autoServiceBrand"
+            options={products?.map(product => product.autoServiceBrand?.name)?.filter(name => name != null)?.filter((value, index, self) => self.indexOf(value) === index) ?? []}
+            value={filterCriteriaAutoService.autoServiceBrand}
             onChange={handleFilterChangeAutoService} />
 
           <Dropdown label="Category"
-            name="autoServiceCategories"
-            options={products.autoServiceCategories?.map(product => product.name).filter((value, index, self) => self.indexOf(value) === index)}
-            value={filterCriteriaAutoService.autoServiceCategories}
+            name="autoServiceCategory"
+            options={products?.map(product => product.autoServiceCategory?.name)?.filter(name => name != null)?.filter((value, index, self) => self.indexOf(value) === index) ?? []}
+            value={filterCriteriaAutoService.autoServiceCategory}
             onChange={handleFilterChangeAutoService} />
 
           {/* Repeat similar dropdowns for other criteria like brand, application, grade, and package */}
         </div>
 
         <div className='max-w-[1300px] mx-auto my-0 flex flex-wrap items-center justify-center md:justify-between gap-y-16 px-5'>
-          {filteredProductsAutoService.length == 0 ? "No Available Products" : filteredProductsAutoService.map(products => (
+          {filteredProductsAutoService?.length == 0 ? "No Available Products" : filteredProductsAutoService?.map(products => (
             <ProductCards
               key={products.id}
               Name={products.productName}
